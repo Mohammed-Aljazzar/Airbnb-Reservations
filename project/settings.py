@@ -67,7 +67,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,9 +141,14 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+LOGOUT_REDIRECT_URL = '/accounts/login/'  # إعادة التوجيه إلى صفحة تسجيل الدخول
 # STORAGES = {
 #     "staticfiles": {
 #         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
 #     },
 # }
+
+
+LOGOUT_REDIRECT_URL = 'settings:home'  # لإعادة التوجيه إلى الصفحة الرئيسية
+# أو
+# LOGOUT_REDIRECT_URL = 'login'  # للبقاء في صفحة تسجيل الدخول

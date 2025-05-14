@@ -9,17 +9,17 @@
 			data-scrollax-parent="true">
 			<div class="col-md-9 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
 				<p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
-						class="mr-2"><a href="index.html">Home</a></span> <span>Hotel</span></p>
-				<h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Hotels</h1>
+						class="mr-2"><a href="">Home</a></span> <span>Logout</span></p>
+				<h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Logout</h1>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="row">
     <div class="col-md-6 mx-auto mt-5 mb-5">
-      <p>Logged out!</p>  
-      <a href="{% url 'login'%}">Click here to login again.</a>
-    
+        <p>Logged out!</p>  
+        <a href="{% url 'login' %}">Click here to login again.</a> | 
+        <a href="{% url 'settings:home' %}">Back to Home</a>
     </div>
 </div>
 

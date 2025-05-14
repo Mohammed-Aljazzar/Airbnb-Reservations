@@ -1,39 +1,103 @@
 {% extends "base.html" %}
 {% load static %}
-{% block body %}
-<div class="hero-wrap js-fullheight" style="background-image: url({% static 'images/bg_5.jpg' %});">
-	<div class="overlay"></div>
-	<div class="container">
-		<div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center"
-			data-scrollax-parent="true">
-			<div class="col-md-9 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-				<p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
-						class="mr-2"><a href="index.html">Home</a></span> <span>Profile</span></p>
-				<h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">My Profile</h1>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row w-100">
-    <div class="col-md-6 mx-auto mt-5 mb-5">
-        {{profile.user.username}}
 
-        {{profile.user.email}}
-        
-        
-        {{profile.phone_number}}
-        
-        {{profile.address}}
-        
-        
-        
-		<h5><a href="{% url 'accounts:profile_edit' %}">Edit Profile</a></h5>
-        <h5><a href="{% url 'password_change' %}">Change Password</a></h5>
-        <h5><a href="{% url 'accounts:myreservation' %}">My Reservation</a></h5>
-        <h5><a href="{% url 'accounts:mylisting' %}">My Listing</a></h5>
+{% block body %}
+<!-- Hero Section -->
+<div class="hero-wrap js-fullheight" style="background-image: url('{% static 'images/bg_5.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+            <div class="col-md-9 ftco-animate text-center" data-scrollax="properties: { translateY: '70%' }">
+                <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                    <span class="mr-2"><a href="{% url 'settings:home' %}">Home</a></span>
+                    <span>Profile</span>
+                </p>
+                <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">My Profile</h1>
+            </div>
+        </div>
     </div>
 </div>
 
+<!-- Profile Section -->
+<section class="ftco-section bg-light">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-4 col-lg-3">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <img src="{% static 'images/avatar-placeholder.png' %}" alt="Profile Avatar" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                        <h5 class="card-title">{{ profile.user.username }}</h5>
+                        <p class="text-muted">{{ profile.user.email }}</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <a href="{% url 'accounts:profile_edit' %}" class="text-decoration-none">
+                                <i class="icon-edit me-2"></i> Edit Profile
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{% url 'password_change' %}" class="text-decoration-none">
+                                <i class="icon-lock me-2"></i> Change Password
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{% url 'accounts:myreservation' %}" class="text-decoration-none">
+                                <i class="icon-calendar me-2"></i> My Reservations
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{% url 'accounts:mylisting' %}" class="text-decoration-none">
+                                <i class="icon-list me-2"></i> My Listings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-8 col-lg-9">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-bottom">
+                        <h4 class="mb-0">Profile Details</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-3 fw-bold">Username</div>
+                            <div class="col-md-9">{{ profile.user.username }}</div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-3 fw-bold">Email</div>
+                            <div class="col-md-9">{{ profile.user.email }}</div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-3 fw-bold">Phone Number</div>
+                            <div class="col-md-9">{{ profile.phone_number|default:"Not provided" }}</div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-3 fw-bold">Address</div>
+                            <div class="col-md-9">{{ profile.address|default:"Not provided" }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-
+<!-- Custom CSS -->
+<style>
+    .list-group-item a {
+        color: #333;
+        transition: color 0.3s ease;
+    }
+    .list-group-item a:hover {
+        color: #007bff;
+    }
+    .card {
+        transition: transform 0.2s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+</style>
 {% endblock %}

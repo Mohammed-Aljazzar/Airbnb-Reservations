@@ -10,7 +10,7 @@ from django_filters.views import FilterView
 
 class PropertyList(FilterView):
     model = Property
-    paginate_by = 1
+    paginate_by = 3
     filterset_class = PropertyFilter
     template_name = 'property/property_list.html'
 

@@ -1,106 +1,190 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load bootstrap4 %}
+
 {% block body %}
-
-
-
-<div class="hero-wrap js-fullheight" style="background-image: url({% static 'images/bg_5.jpg' %});">
-	<div class="overlay"></div>
-	<div class="container">
-		<div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center"
-			data-scrollax-parent="true">
-			<div class="col-md-9 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-				<p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
-						class="mr-2"><a href="index.html">Home</a></span> <span>My Reservation</span></p>
-				<h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">My Reservation</h1>
-			</div>
-		</div>
-	</div>
+<!-- Hero Section -->
+<div class="hero-wrap js-fullheight" style="background-image: url('{% static 'images/bg_5.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center" data-scrollax-parent="true">
+            <div class="col-md-9 ftco-animate text-center" data-scrollax="properties: { translateY: '70%' }">
+                <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                    <span class="mr-2"><a href="{% url 'settings:home' %}">Home</a></span>
+                    <span class="mr-2"><a href="{% url 'accounts:profile' %}">Profile</a></span>
+                    <span>My Reservations</span>
+                </p>
+                <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">My Reservations</h1>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- Reservations Section -->
+<section class="ftco-section ftco-degree-bg bg-light">
+    <div class="container">
+        <!-- Header with Sorting -->
+        <div class="row mb-4">
+            <div class="col-12 d-flex justify-content-between align-items-center flex-wrap">
+                <h2 class="h4 mb-0">Your Reservations</h2>
+                <form class="d-flex" method="GET">
+                    <select name="sort" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                        <option value="">Sort By</option>
+                        <option value="date_desc" {% if request.GET.sort == 'date_desc' %}selected{% endif %}>Booking Date: Newest</option>
+                        <option value="date_asc" {% if request.GET.sort == 'date_asc' %}selected{% endif %}>Booking Date: Oldest</option>
+                        <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                    </select>
+                </form>
+            </div>
+        </div>
 
-<section class="ftco-section ftco-degree-bg">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="row">
-					
-					{% for property in property_list %}	
-						<div class="col-md-3 ftco-animate">
-							<div class="destination">
-								<a href="{{property.property.get_absolute_url}}"
-									class="img img-2 d-flex justify-content-center align-items-center"
-									style="background-image: url('{{property.property.image.url}}');">
-									<div class="icon d-flex justify-content-center align-items-center">
-										<span class="icon-search2"></span>
-									</div>
-								</a>
-								<div class="text p-3">
-									<div class="d-flex">
-										<div class="one">
-											<h3><a href="{{property.property.get_absolute_url}}">{{property.property.name}}</a></h3>
-											<p class="rate">
-												<i class="icon-star"></i>
-												<i class="icon-star"></i>
-												<i class="icon-star"></i>
-												<i class="icon-star"></i>
-												<i class="icon-star-o"></i>
-												<span>8 Rating</span>
-											</p>
-										</div>
-										<div class="two">
-											<span class="price per-price">${{property.property.price}}<br><small>/night</small></span>
-										</div>
-									</div>
-									<p>{{property.property.description|safe|truncatewords:5}}</p>
-									<hr>
-									<p class="bottom-area d-flex">
-										<span><i class="icon-map-o"></i> {{property.property.place}}</span>
-											
-										<span class="ml-auto"><a href="{% url 'accounts:add_feedback' property.property.slug %}">Write Your Feedback</a></span>
-										<span class="ml-auto"><a href="">Write Your Feedback</a></span>
-									</p>
-								</div>
-							</div>
+        <!-- Reservation Grid -->
+        <div class="row">
+            {% for property in property_list %}
+            <div class="col-md-6 col-lg-4 ftco-animate mb-4">
+                <div class="card shadow-sm h-100">
+                    <a href="{{ property.property.get_absolute_url }}" class="text-decoration-none position-relative">
+                        <div class="card-img-top" style="background-image: url('{{ property.property.image.url|default:'{% static "images/placeholder.jpg" %}' }}'); height: 200px; background-size: cover; background-position: center;">
+                            <div class="overlay d-flex justify-content-center align-items-center">
+                                <span class="icon-search2 text-white"></span>
+                            </div>
+                            <!-- Status Badge -->
+                            {% if property.status == 'Confirmed' %}
+                            <span class="badge bg-success position-absolute top-0 start-0 m-2" style="position: relative;top: 0;right: 0;">Confirmed</span>
+                            {% elif property.status == 'Pending' %}
+                            <span class="badge bg-warning position-absolute top-0 start-0 m-2" style="position: relative;top: 0;right: 0;">Pending</span>
+                            {% else %}
+                            <span class="badge bg-danger position-absolute top-0 start-0 m-2" style="position: relative;top: 0;right: 0;">Cancelled</span>
+                            {% endif %}
                         </div>
-                    {% empty %}
-                        <h2> not available now ...</h2>
-					{% endfor %}
-				</div>
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-2">
+                            <a href="{{ property.property.get_absolute_url }}" class="text-dark">{{ property.property.name }}</a>
+                        </h5>
+                        <p class="rate mb-2">
+                            {% with rating=property.property.get_avg_rating|default:0 %}
+                            {% for i in "12345" %}
+                            <i class="icon-star{% if i|add:0 <= rating|add:0 %} {% else %}-o{% endif %}"></i>
+                            {% endfor %}
+                            <span class="text-muted small">
+                                {% if rating != 0 %}{{ rating }}{% else %}No{% endif %} Rating
+                            </span>
+                            {% endwith %}
+                        </p>
+                        <p class="card-text flex-grow-1">{{ property.property.description|safe|truncatewords:15 }}</p>
+                        <div class="mb-2">
+                            <small class="text-muted">
+                                <i class="icon-calendar me-1"></i> 
+                                {{ property.start_date|date:"M d, Y" }} - {{ property.end_date|date:"M d, Y" }}
+                            </small>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted"><i class="icon-map-o me-1"></i> {{ property.property.place }}</span>
+                            <span class="text-primary fw-bold">${{ property.property.price }} <small>/night</small></span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-light border-top-0">
+                        <div class="d-flex justify-content-between flex-wrap gap-1">
+                            {% if property.status == 'Confirmed' or property.status == 'Pending' %}
+                            <a href="{% url 'accounts:cancel_reservation' property.id|default:'#' %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to cancel this reservation?');">
+                                <i class="icon-trash me-1"></i> Cancel
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'accounts:add_feedback' property.property.slug %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="icon-comment me-1"></i> Feedback
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <h4 class="text-muted">No Reservations Yet</h4>
+                <p class="mb-4">Explore properties and start booking your next adventure!</p>
+                <a href="{% url 'property:property_list' %}" class="btn btn-primary">
+                    <i class="icon-search me-1"></i> Browse Properties
+                </a>
+            </div>
+            {% endfor %}
+        </div>
 
-				{% if is_paginated %}
-				<div class="row mt-5">
-					<div class="col text-center">
-						<div class="block-27">
-							<ul>
-								{% if page_obj.has_previous %}
-									<li><a href="?page={{ page_obj.previous_page_number }}">&lt;</a></li>
-								{% else %}
-									<li class="disabled"><span>&laquo;</span></li>
-								{% endif %}
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="row mt-5">
+            <div class="col text-center">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" aria-label="Previous">
+                                <span aria-hidden="true">«</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">«</span>
+                        </li>
+                        {% endif %}
 
-								{% for i in paginator.page_range %}
-									{% if page_obj.number == i %}
-										<li class="active"><span>{{ i }}</span></li>
-									{% else %}
-										<li><a href="?page={{ i }}">{{ i }}</a></li>
-									{% endif %}
-								{% endfor %}
+                        {% for i in paginator.page_range %}
+                        <li class="page-item {% if page_obj.number == i %}active{% endif %}">
+                            <a class="page-link" href="?page={{ i }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">{{ i }}</a>
+                        </li>
+                        {% endfor %}
 
-								{% if page_obj.has_next %}
-									<li><a href="?page={{ page_obj.next_page_number }}">&gt;</a></li>
-								{% else %}
-									<li class="disabled"><span>&raquo;</span></li>
-								{% endif %}
-							</ul>
-						</div>
-					</div>
-				</div>
-				{% endif %}
-			</div> <!-- .col-md-8 -->
-		</div>
-	</div>
-</section> <!-- .section -->
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" aria-label="Next">
+                                <span aria-hidden="true">»</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">»</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
 
+<!-- Custom CSS -->
+<style>
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    .card-img-top .overlay {
+        background: rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        height: 100%;
+        width: 100%;
+    }
+    .card-img-top:hover .overlay {
+        opacity: 1;
+    }
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.5em 0.75em;
+    }
+    .pagination .page-link {
+        color: #007bff;
+        border-radius: 0.25rem;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .form-select-sm {
+        max-width: 200px;
+    }
+</style>
 {% endblock body %}

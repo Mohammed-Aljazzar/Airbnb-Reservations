@@ -177,7 +177,7 @@
                                 <span class="price">${{place.price}}</span>
                             </div>
                         </div>
-                        <p>{{place.description}}</p>
+                        <p>{{place.description|safe|truncatechars:4}}</p>
                         <p class="days"><span>2 days 3 nights</span></p>
                         <hr>
                         <p class="bottom-area d-flex">
@@ -407,10 +407,10 @@
                                 <i class="icon-star-o"></i>
                                 <span>8 Rating</span>
                             </p>
-                            <p>{{restaurant.description|truncatewords:5|safe}}</p>
+                            <p>{{restaurant.description|truncatechars:10|safe}}</p>
                             <hr>
                             <p class="bottom-area d-flex">
-                                <span><i class="icon-map-o"></i>{{restaurant.place}}</span>
+                                <span><i class="icon-map-o"></i> {{restaurant.place}}</span>
                                 <span class="ml-auto"><a href="{{restaurant.get_absolute_url}}">Discover</a></span>
                             </p>
                         </div>
@@ -442,8 +442,14 @@
                             style="background-image: url('{{post.image.url}}');">
                         </a>
                         <div class="text p-4 d-block">
-                            <span class="tag">{{post.tag}}</span>
-                            <h3 class="heading mt-3"><a href="#">{{post.description | safe}}</a>
+                            <div class="mb-2">
+                                {% for tag in post.tag.all %}
+                                    <span class="badge badge-primary mr-1">{{ tag.name }}</span>
+                                {% empty %}
+                                    <span class="badge badge-secondary">No Tags</span>
+                                {% endfor %}
+                            </div>
+                            <h3 class="heading mt-3"><a href="#">{{post.description | safe| truncatechars:15}}</a>
                             </h3>
                             <div class="meta mb-3">
                                 <div><a href="{{post.get_absolute_url}}">{{post.created_at | date:'F j Y'}}</a></div>

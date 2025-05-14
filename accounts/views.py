@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from property.models import Property, PropertyBook, PropertyReview
 from property.forms import PropertyReviewForm
+from django.contrib.auth import logout
 # Create your views here.
 
 def signup(request):
@@ -116,3 +117,7 @@ def mylisting(request):
         return render(request,'profile/property_feedback.html' , {'form':form , 'property':property})
 
         '''
+        
+def custom_logout(request):
+    logout(request)
+    return redirect('settings:home')

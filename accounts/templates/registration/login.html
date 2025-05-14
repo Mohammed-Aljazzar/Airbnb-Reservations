@@ -1,36 +1,50 @@
 {% extends "base.html" %}
 {% load static %}
 {% load bootstrap4 %}
+
 {% block body %}
-<div class="hero-wrap js-fullheight" style="background-image: url({% static 'images/bg_5.jpg' %});">
-	<div class="overlay"></div>
-	<div class="container">
-		<div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center"
-			data-scrollax-parent="true">
-			<div class="col-md-9 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-				<p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
-						class="mr-2"><a href="index.html">Home</a></span> <span>login</span></p>
-				<h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Login</h1>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row w-100">
-    <div class="col-md-6 mx-auto mt-5 mb-5">
-    
-    <form method="POST">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-
-        {% buttons %}
-            <button type="submit" class="btn btn-primary py-3">Login</button>
-        {% endbuttons %}
-
-    </form>
-    
+  <!-- Hero Section -->
+  <div class="hero-wrap js-fullheight" style="background-image: url({% static 'images/bg_5.jpg' %});">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-center"
+           data-scrollax-parent="true">
+        <div class="col-md-9 ftco-animate text-center" data-scrollax="properties: { translateY: '70%' }">
+         
+		   <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
+                        class="mr-2"><a href="index.html">Home</a></span> <span class="mr-2"><a
+                            href="">login</a></span></p>
+          <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Login</h1>
+        </div>
+      </div>
     </div>
-</div>
-</div>
+  </div>
 
+  <!-- Login Form Section -->
+  <section class="ftco-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">Login</h2>
+              <form method="POST">
+                {% csrf_token %}
+                {% bootstrap_form form show_label=True layout='vertical' %}
+                <div class="text-center mb-3">
+                  <a href="{% url 'password_reset' %}" class="text-muted">Forgot your password?</a>
+                </div>
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary btn-block py-3">Login</button>
+                </div>
+              </form>
+              <div class="text-center mt-3">
+                <p class="text-muted">Don't have an account? <a href="{% url 'accounts:signup' %}">Sign Up</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock body %}
