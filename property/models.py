@@ -8,10 +8,10 @@ from django_summernote.fields import SummernoteTextField
 # Create your models here.
 class Property(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='property_owner')
     image = models.ImageField(upload_to='property/')
     price = models.IntegerField(default=0)
     description = models.TextField(max_length=20000)
-    # description = SummernoteTextField(max_length=10000)
     place = models.ForeignKey('Place', on_delete=models.CASCADE, related_name='property_place')
     category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='property_category')
     created_at = models.DateTimeField(default=timezone.now)
@@ -28,6 +28,31 @@ class Property(models.Model):
     def get_absolute_url(self):
         return reverse("property:property_detail", kwargs={"slug": self.slug})
     
+
+    def check_availability(self):
+        all_reservations = self.book_property.all()
+        now = timezone.now().date()
+        for reservation in all_reservations:
+            if now > reservation.date_to:
+                return 'Available'
+            elif now > reservation.date_from and now < reservation.date_to:
+                reversed_to = reservation.date_to
+                return (f'In progress {reversed_to}')
+        else:
+            return 'Available'
+    
+    def get_avg_rating(self):
+        all_reviews = self.review_property.all()
+        all_rating = 0
+        
+        if len(all_reviews) > 0:
+            for review in all_reviews:
+                all_rating += review.rate
+            return round(all_rating / len(all_reviews),2)
+        else:
+            return '-'
+        
+
 
 class PropertyImages(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name="property_images")
@@ -81,4 +106,11 @@ class PropertyBook(models.Model):
 
     def __str__(self):
         return str(self.property)
+    
+    
+    def in_progress(self):
+        now = timezone.now().date()
+        return now > self.date_from and now < self.date_to
+    
+    in_progress.boolean = True
     

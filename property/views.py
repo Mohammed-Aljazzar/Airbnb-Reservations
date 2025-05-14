@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView , CreateView
 from .models import Property
 from django.views.generic.edit import FormMixin
 from .forms import PropertyBookForm
@@ -41,8 +41,17 @@ class PropertyDetail(FormMixin,DetailView):
             print('not valid')
             
             
-            
-            
+# class AddListing(CreateView):
+#     model = Property
+#     # template_name = 'property/add_listing.html'
+#     # fields = ['title','description','price','location','category','image']
+#     # success_url = '/property/listing'
+#     # def form_valid(self,form):
+#     #     form.instance.user = self.request.user
+#     #     return super().form_valid(form)
+#     # def form_invalid(self,form):
+        
+               
             
             
             

@@ -40,7 +40,7 @@
           			<h2>{{object}}</h2>
           			<p class="rate mb-5">
           				<span class="loc"><a href="#"><i class="icon-map"></i> {{object.place}}</a></span>
-          				<span class="star">
+          				<span cl ass="star">
     							<i class="icon-star"></i>
     							<i class="icon-star"></i>
     							<i class="icon-star"></i>
@@ -52,6 +52,12 @@
     						
           		</div>
           		
+				{% if object.check_availability == 'Available' %}
+					<h5 class="text-muted">Available Today</h5>
+				{% else %}
+					<h5 class="text-muted ">The room is being booked, The Reservation <span class="text-danger">{{object.check_availability}}</span></h5>
+				{% endif %}
+					
           		<div class="col-md-12 hotel-single ftco-animate mb-5 mt-4">
           			<h4 class="mb-5">Check Availability &amp; Booking</h4>
           			{% comment %} <div class="fields">

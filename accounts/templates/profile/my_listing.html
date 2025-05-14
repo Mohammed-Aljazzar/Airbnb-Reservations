@@ -1,4 +1,4 @@
-{% comment %} {% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load bootstrap4 %}
 {% block body %}
@@ -12,8 +12,8 @@
 			data-scrollax-parent="true">
 			<div class="col-md-9 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
 				<p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span
-						class="mr-2"><a href="index.html">Home</a></span> <span>Hotel</span></p>
-				<h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">{{my_category|title}}</h1>
+						class="mr-2"><a href="index.html">Home</a></span> <span>My Listing</span></p>
+				<h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">My Listing</h1>
 			</div>
 		</div>
 	</div>
@@ -23,15 +23,15 @@
 <section class="ftco-section ftco-degree-bg">
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-9">
+			<div class="col-lg-12">
 				<div class="row">
 					
-					{% for property in user_reservation %}	
-						<div class="col-md-4 ftco-animate">
+					{% for property in property_list %}	
+						<div class="col-md-3 ftco-animate">
 							<div class="destination">
 								<a href="{{property.get_absolute_url}}"
 									class="img img-2 d-flex justify-content-center align-items-center"
-									style="background-image: url('{{property.property.image.url}}');">
+									style="background-image: url('{{property.image.url}}');">
 									<div class="icon d-flex justify-content-center align-items-center">
 										<span class="icon-search2"></span>
 									</div>
@@ -39,7 +39,7 @@
 								<div class="text p-3">
 									<div class="d-flex">
 										<div class="one">
-											<h3><a href="{{property.get_absolute_url}}">{{property}}</a></h3>
+											<h3><a href="{{property.get_absolute_url}}">{{property.name}}</a></h3>
 											<p class="rate">
 												<i class="icon-star"></i>
 												<i class="icon-star"></i>
@@ -50,15 +50,15 @@
 											</p>
 										</div>
 										<div class="two">
-											<span class="price per-price">${{property.property.price}}<br><small>/night</small></span>
+											<span class="price per-price">${{property.price}}<br><small>/night</small></span>
 										</div>
 									</div>
-									<p>{{property.property.description|safe|truncatewords:5}}</p>
+									<p>{{property.description|safe|truncatewords:5}}</p>
 									<hr>
 									<p class="bottom-area d-flex">
-										<span><i class="icon-map-o"></i> {{property.property.place}}</span>
+										<span><i class="icon-map-o"></i> {{property.place}}</span>
 											
-										<span class="ml-auto"><a href="{% url 'accounts:add_feedback' property.property.slug %}">Write Your Feedback</a></span>
+										<span class="ml-auto"><a href="{% url 'accounts:add_feedback' property.slug %}">Write Your Feedback</a></span>
 									</p>
 								</div>
 							</div>
@@ -102,4 +102,4 @@
 	</div>
 </section> <!-- .section -->
 
-{% endblock body %} {% endcomment %}
+{% endblock body %}
